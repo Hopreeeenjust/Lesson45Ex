@@ -8,11 +8,14 @@
 
 #import "RJFriendProfileController.h"
 #import "RJServerManager.h"
-#import "RJFriend.h"
+#import "RJUser.h"
 #import "UIImageView+AFNetworking.h"
+#import "RJFollowersViewController.h"
+#import "RJFriendsViewController.h"
+#import "RJGroupsViewController.h"
 
 @interface RJFriendProfileController ()
-@property (strong, nonatomic) RJFriend *friend;
+@property (strong, nonatomic) RJUser *friend;
 @end
 
 @implementation RJFriendProfileController
@@ -50,13 +53,11 @@
      getFriendInfoForId:self.userID
      onSuccess:^(NSArray *friendsInfo) {
          NSDictionary *userInfo = [friendsInfo firstObject];
-         RJFriend *friend = [[RJFriend alloc] initWithDictionary:userInfo];
+         RJUser *friend = [[RJUser alloc] initWithDictionary:userInfo];
          self.friend = friend;
          [self.photoImageView setImageWithURL:[NSURL URLWithString:friend.originalImageUrl]];
          self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
-         if (friend.city) {
-             self.cityLabel.text = [NSString stringWithFormat:@"%@, %@", [friend.city substringToIndex:friend.city.length - 1], friend.country];
-         }
+         self.cityLabel.text = [self showCityAndCountry];
          if (friend.online) {
              if (friend.onlineMobile) {
                  self.statusLabel.text = @"Online (mob.)";
@@ -76,6 +77,30 @@
          NSLog(@"Error = %@, code = %ld", [error localizedDescription], statusCode);
 
      }];
+}
+
+#pragma mark - Actions
+
+- (IBAction)actionShowUserFollowers:(UIButton *)sender {
+    RJFollowersViewController *vc = [[RJFollowersViewController alloc] initWithStyle:UITableViewStylePlain];
+    vc.userID = self.userID;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (IBAction)actionShowUserGroups:(UIButton *)sender {
+//    RJGroupsViewController *vc = [[RJGroupsViewController alloc] initWithStyle:UITableViewStylePlain];
+//    vc.userID = self.userID;
+//    [self.navigationController pushViewController:vc animated:YES];
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Authorization needed" message:@"You have to be authorized to see user's groups" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+    [ac addAction:action];
+    [self presentViewController:ac animated:YES completion:nil];
+}
+
+- (IBAction)actionShowUserFriends:(UIButton *)sender {
+    RJFriendsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"RJFriendsViewController"];
+    vc.userID = self.userID;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Methods
@@ -125,6 +150,19 @@
 
     } else {
         return [NSString stringWithFormat:@"%ld years", age];
+    }
+}
+
+- (NSString *)showCityAndCountry {
+    if (self.friend.city) {
+        NSString *lastLetterInCityName = [self.friend.city substringFromIndex:self.friend.city.length - 1];
+        if ([lastLetterInCityName isEqualToString:@" "]) {
+            return [NSString stringWithFormat:@"%@, %@", [self.friend.city substringToIndex:self.friend.city.length - 1], self.friend.country];
+        } else {
+            return [NSString stringWithFormat:@"%@, %@", self.friend.city, self.friend.country];
+        }
+    } else {
+        return nil;
     }
 }
 

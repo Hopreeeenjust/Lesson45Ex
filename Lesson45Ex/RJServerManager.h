@@ -12,13 +12,26 @@
 
 + (RJServerManager *)sharedManager;
 
-- (void) getFriendsWithCount:(NSInteger)count
-                   andOffset:(NSInteger)offset
-                   onSuccess:(void(^)(NSArray *friends))success
-                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+- (void) getFriendsForId:(NSInteger)friendId
+               withCount:(NSInteger)count
+               andOffset:(NSInteger)offset
+               onSuccess:(void(^)(NSArray *friends))success
+               onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void) getFriendInfoForId:(NSInteger)friendId
                   onSuccess:(void(^)(NSArray *friends))success
                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void) getFollowersForId:(NSInteger)friendId
+                 withCount:(NSInteger)count
+                 andOffset:(NSInteger)offset
+                 onSuccess:(void(^)(NSArray *followers))success
+                 onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void) getGroupsForId:(NSInteger)userId
+              withCount:(NSInteger)count
+              andOffset:(NSInteger)offset
+              onSuccess:(void(^)(NSArray *friends))success
+              onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 @end

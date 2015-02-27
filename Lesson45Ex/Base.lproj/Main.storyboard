@@ -111,7 +111,7 @@
                                                     <color key="backgroundColor" red="0.10508591439999999" green="0.49237203200000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <state key="normal">
                                                         <attributedString key="attributedTitle">
-                                                            <fragment content="Groups">
+                                                            <fragment content="Friends">
                                                                 <attributes>
                                                                     <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <font key="NSFont" size="15" name="HelveticaNeue-Bold"/>
@@ -120,9 +120,12 @@
                                                             </fragment>
                                                         </attributedString>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="actionShowUserFriends:" destination="8qJ-vk-TL9" eventType="touchUpInside" id="Ou0-8d-nfk"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="r6I-dE-Ed7">
-                                                    <rect key="frame" x="134" y="7" width="107" height="30"/>
+                                                    <rect key="frame" x="255" y="7" width="107" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="0.10508591439999999" green="0.49237203200000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <state key="normal">
@@ -136,14 +139,17 @@
                                                             </fragment>
                                                         </attributedString>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="actionShowUserFollowers:" destination="8qJ-vk-TL9" eventType="touchUpInside" id="Puq-WT-8DT"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="C2n-Lg-P3h">
-                                                    <rect key="frame" x="255" y="7" width="107" height="30"/>
+                                                    <rect key="frame" x="134" y="7" width="107" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="0.10508591439999999" green="0.49237203200000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <state key="normal">
                                                         <attributedString key="attributedTitle">
-                                                            <fragment content="Following">
+                                                            <fragment content="Groups">
                                                                 <attributes>
                                                                     <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <font key="NSFont" size="15" name="HelveticaNeue-Bold"/>
@@ -152,6 +158,9 @@
                                                             </fragment>
                                                         </attributedString>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="actionShowUserGroups:" destination="8qJ-vk-TL9" eventType="touchUpInside" id="SXE-4I-OGj"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>

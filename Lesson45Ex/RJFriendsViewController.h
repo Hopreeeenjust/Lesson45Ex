@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface RJFriendsViewController : UITableViewController
+@property (assign, nonatomic) NSInteger userID;
 @end
 

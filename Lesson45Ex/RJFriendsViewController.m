@@ -8,7 +8,7 @@
 
 #import "RJFriendsViewController.h"
 #import "RJServerManager.h"
-#import "RJFriend.h"
+#import "RJUser.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIScrollView+InfiniteScroll.h"
 #import "RJFriendProfileController.h"
@@ -16,7 +16,6 @@
 
 @interface RJFriendsViewController () <UITableViewDataSource>
 @property (strong, nonatomic) NSArray *friendsArray;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
 @end
 
 NSInteger friendsBatch = 20;
@@ -27,12 +26,14 @@ NSInteger friendsBatch = 20;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (!self.userID) {
+        self.userID = 6054746;
+    } else {
+        self.navigationItem.title = @"Friends";
+    }
     self.friendsArray = [NSArray new];
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
-    [self.tableView addSubview:refreshControl];
-    [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refreshControl;
+    [self getFriendsFromServer];
     
     self.tableView.infiniteScrollIndicatorStyle = UIActivityIndicatorViewStyleGray;
     __weak RJFriendsViewController *weakSelf = self;
@@ -46,17 +47,11 @@ NSInteger friendsBatch = 20;
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark - Methods
-
-- (void)refreshTable {
-    [self getFriendsFromServer];
-    [self.refreshControl endRefreshing];
-}
 
 #pragma mark - API
 
 - (void)getFriendsFromServer {
-    [[RJServerManager sharedManager] getFriendsWithCount:friendsBatch andOffset:[self.friendsArray count] onSuccess:^(NSArray *friends) {
+    [[RJServerManager sharedManager] getFriendsForId:self.userID withCount:friendsBatch andOffset:[self.friendsArray count] onSuccess:^(NSArray *friends) {
         [[self mutableArrayValueForKey:@"friendsArray"] addObjectsFromArray:friends];;
         NSMutableArray *newPaths = [NSMutableArray array];
         for (int i = (int)[self.friendsArray count] - (int)[friends count]; i < [self.friendsArray count]; i++) {
@@ -83,7 +78,7 @@ NSInteger friendsBatch = 20;
         cell = [[RJFriendListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     NSDictionary *friendInfo = [self.friendsArray objectAtIndex:indexPath.row];
-    RJFriend *friend = [[RJFriend alloc] initWithDictionary:friendInfo];
+    RJUser *friend = [[RJUser alloc] initWithDictionary:friendInfo];
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
     NSURL *imageURL = [NSURL URLWithString:friend.imageUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:imageURL];
@@ -115,7 +110,7 @@ NSInteger friendsBatch = 20;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *friendInfo = [self.friendsArray objectAtIndex:indexPath.row];
-    RJFriend *friend = [[RJFriend alloc] initWithDictionary:friendInfo];
+    RJUser *friend = [[RJUser alloc] initWithDictionary:friendInfo];
     RJFriendProfileController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"RJFriendProfileController"];
     vc.userID = friend.friendID;
     vc.title = friend.firstName;

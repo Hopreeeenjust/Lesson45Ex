@@ -35,12 +35,13 @@
     return self;
 }
 
-- (void) getFriendsWithCount:(NSInteger)count
+- (void) getFriendsForId:(NSInteger)friendId
+                   withCount:(NSInteger)count
                    andOffset:(NSInteger)offset
                    onSuccess:(void(^)(NSArray *friends))success
                    onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     NSDictionary *parameters = @{
-                                 @"user_id": @"6054746",
+                                 @"user_id": @(friendId),
                                  @"order": @"name",
                                  @"count": @(count),
                                  @"offset": @(offset),
@@ -83,6 +84,123 @@
                               }];
 }
 
+- (void) getFollowersForId:(NSInteger)friendId
+                   withCount:(NSInteger)count
+                   andOffset:(NSInteger)offset
+                   onSuccess:(void(^)(NSArray *followers))success
+                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    NSDictionary *parameters = @{
+                                 @"user_id": @(friendId),
+                                 @"count": @(count),
+                                 @"offset": @(offset),
+                                 @"fields": @[@"photo_100", @"online"],
+                                 @"name_case": @"nom",
+                                 @"v": (@5.8)};
+    
+    [self.requestOperationManager GET:@"users.getFollowers?"
+                           parameters:parameters
+                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                  NSArray *followers = [[responseObject valueForKey:@"response"] valueForKey:@"items"];
+                                  if (success) {
+                                      success(followers);
+                                  }
+                              }
+                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  failure(error, error.code);
+                              }];
+}
+
+- (void) getUserFollowingsForId:(NSInteger)friendId
+                 withCount:(NSInteger)count
+                 andOffset:(NSInteger)offset
+                 onSuccess:(void(^)(NSArray *followers))success
+                 onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    NSDictionary *parameters = @{
+                                 @"user_id": @(friendId),
+                                 @"count": @(count),
+                                 @"offset": @(offset),
+                                 @"fields": @[@"photo_100", @"online"],
+                                 @"name_case": @"nom",
+                                 @"v": (@5.8)};
+    
+    [self.requestOperationManager GET:@"users.getFollowers?"
+                           parameters:parameters
+                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                  NSArray *followers = [[responseObject valueForKey:@"response"] valueForKey:@"items"];
+                                  if (success) {
+                                      success(followers);
+                                  }
+                              }
+                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  failure(error, error.code);
+                              }];
+}
+
+- (void) getGroupsForId:(NSInteger)userId
+               withCount:(NSInteger)count
+               andOffset:(NSInteger)offset
+               onSuccess:(void(^)(NSArray *groups))success
+               onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    NSDictionary *parameters = @{
+                                 @"user_id": @(userId),
+                                 @"extended": @1,
+                                 @"count": @(count),
+                                 @"offset": @(offset),
+//                                 @"fields": @[@"photo_100", @"online"],
+                                 @"v": (@5.8)};
+    
+    [self.requestOperationManager GET:@"groups.get?"
+                           parameters:parameters
+                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                  NSArray *groups = [[responseObject valueForKey:@"response"] valueForKey:@"items"];
+                                  if (success) {
+                                      success(groups);
+                                  }
+                              }
+                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  failure(error, error.code);
+                              }];
+}
+
+- (void) getWallForId:(NSInteger)userId
+              withCount:(NSInteger)count
+              andOffset:(NSInteger)offset
+              onSuccess:(void(^)(NSArray *posts))success
+              onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    NSDictionary *parameters = @{
+                                 @"user_id": @(userId),
+                                 @"extended": @1,
+                                 @"count": @(count),
+                                 @"offset": @(offset),
+                                 //                                 @"fields": @[@"photo_100", @"online"],
+                                 @"v": (@5.8)};
+    
+    [self.requestOperationManager GET:@"groups.get?"
+                           parameters:parameters
+                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                  NSArray *groups = [[responseObject valueForKey:@"response"] valueForKey:@"items"];
+                                  if (success) {
+                                      success(groups);
+                                  }
+                              }
+                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  failure(error, error.code);
+                              }];
+}
+
+owner_id
+
+domain
+
+offset
+
+count
+
+filter
+
+extended
+
+version
 
 @end
 

@@ -10,4 +10,6 @@
 
 @interface RJFriendListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *onlineImageView;
+
+@property (strong, nonatomic) UIImageView *onlineStatusImageView;
 @end

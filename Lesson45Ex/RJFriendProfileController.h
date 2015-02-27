@@ -18,7 +18,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *followersButton;
 @property (weak, nonatomic) IBOutlet UIButton *followingButton;
 
-
 @property (assign, nonatomic) NSInteger userID;
 @property (strong, nonatomic) NSString *title;
+
+- (IBAction)actionShowUserFollowers:(UIButton *)sender;
+- (IBAction)actionShowUserFriends:(UIButton *)sender;
+- (IBAction)actionShowUserGroups:(UIButton *)sender;
 @end
