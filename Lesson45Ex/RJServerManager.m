@@ -162,45 +162,34 @@
                               }];
 }
 
-- (void) getWallForId:(NSInteger)userId
+- (void) getWallForId:(NSInteger)ownerID
               withCount:(NSInteger)count
               andOffset:(NSInteger)offset
-              onSuccess:(void(^)(NSArray *posts))success
+              onSuccess:(void(^)(NSArray *posts, NSArray *users, NSArray *groups))success
               onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     NSDictionary *parameters = @{
-                                 @"user_id": @(userId),
+                                 @"owner_id": @(ownerID),
                                  @"extended": @1,
                                  @"count": @(count),
                                  @"offset": @(offset),
-                                 //                                 @"fields": @[@"photo_100", @"online"],
+                                 @"filter": @"all",
+                                 @"lang": @"ru",
                                  @"v": (@5.8)};
     
-    [self.requestOperationManager GET:@"groups.get?"
+    [self.requestOperationManager GET:@"wall.get?"
                            parameters:parameters
                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                  NSArray *groups = [[responseObject valueForKey:@"response"] valueForKey:@"items"];
+                                  NSArray *posts = [responseObject valueForKeyPath:@"response.items"];
+                                  NSArray *users = [responseObject valueForKeyPath:@"response.profiles"];
+                                  NSArray *groups = [responseObject valueForKeyPath:@"response.groups"];
                                   if (success) {
-                                      success(groups);
+                                      success(posts, users, groups);
                                   }
                               }
                               failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   failure(error, error.code);
                               }];
 }
-
-owner_id
-
-domain
-
-offset
-
-count
-
-filter
-
-extended
-
-version
 
 @end
 

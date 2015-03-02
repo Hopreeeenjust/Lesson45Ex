@@ -13,10 +13,23 @@
 #import "RJFollowersViewController.h"
 #import "RJFriendsViewController.h"
 #import "RJGroupsViewController.h"
+#import "UIScrollView+InfiniteScroll.h"
+#import "RJWallPost.h"
+#import "RJWallPostCell.h"
+#import "RJGroup.h"
+#import "RJPhoto.h"
 
-@interface RJFriendProfileController ()
+@interface RJFriendProfileController () <UITableViewDataSource>
 @property (strong, nonatomic) RJUser *friend;
+@property (strong, nonatomic) RJUser *postOwner;
+@property (strong, nonatomic) id repostOwner;
+@property (strong, nonatomic) NSArray *postsArray;
+@property (strong, nonatomic) NSArray *usersArray;
+@property (strong, nonatomic) NSArray *groupsArray;
+
 @end
+
+NSInteger wallPostsBatch = 7;
 
 @implementation RJFriendProfileController
 
@@ -29,12 +42,24 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.title = self.title;
     [self getFriendInfoFromServer];
+    [self getWallPostsFromServer];
     self.followersButton.layer.cornerRadius = 5;
     self.followersButton.clipsToBounds = YES;
     self.followingButton.layer.cornerRadius = 5;
     self.followingButton.clipsToBounds = YES;
     self.groupsButton.layer.cornerRadius = 5;
     self.groupsButton.clipsToBounds = YES;
+    
+    self.postsArray = [NSArray new];
+    self.usersArray = [NSArray new];
+    self.groupsArray = [NSArray new];
+    
+    self.tableView.infiniteScrollIndicatorStyle = UIActivityIndicatorViewStyleGray;
+    __weak RJFriendProfileController *weakSelf = self;
+    [self.tableView addInfiniteScrollWithHandler:^(UIScrollView *scrollView) {
+        [weakSelf getWallPostsFromServer];
+        [scrollView finishInfiniteScroll];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,6 +104,38 @@
      }];
 }
 
+- (void)getWallPostsFromServer {
+    [[RJServerManager sharedManager]
+     getWallForId:self.userID
+     withCount:wallPostsBatch
+     andOffset:[self.postsArray count]
+     onSuccess:^(NSArray *posts, NSArray *users, NSArray *groups) {
+         for (NSDictionary *postInfo in posts) {
+             RJWallPost *post = [[RJWallPost alloc] initWithDictionary:postInfo];
+             [[self mutableArrayValueForKey:@"postsArray"] addObject:post];
+         }
+         for (NSDictionary *userInfo in users) {
+             RJUser *user = [[RJUser alloc] initWithDictionary:userInfo];
+             [[self mutableArrayValueForKey:@"usersArray"] addObject:user];
+         }
+         for (NSDictionary *groupInfo in groups) {
+             RJGroup *group = [[RJGroup alloc] initWithDictionary:groupInfo];
+             [[self mutableArrayValueForKey:@"groupsArray"] addObject:group];
+         }
+         NSMutableArray *newPaths = [NSMutableArray array];
+         for (int i = (int)[self.postsArray count] - (int)[posts count]; i < [self.postsArray count]; i++) {
+             [newPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+         }
+         [self.tableView beginUpdates];
+         [self.tableView insertRowsAtIndexPaths:newPaths withRowAnimation:UITableViewRowAnimationTop];
+         [self.tableView endUpdates];
+//         [self.tableView reloadData];
+     }
+     onFailure:^(NSError *error, NSInteger statusCode) {
+         NSLog(@"Error = %@, code = %ld", [error localizedDescription], statusCode);
+     }];
+}
+
 #pragma mark - Actions
 
 - (IBAction)actionShowUserFollowers:(UIButton *)sender {
@@ -102,6 +159,159 @@
     vc.userID = self.userID;
     [self.navigationController pushViewController:vc animated:YES];
 }
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.postsArray count];
+}
+
+- (RJWallPostCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *postIdentifier = @"Post";
+    static NSString *repostIdentifier = @"Repost";
+    NSString *identifier;
+    RJWallPost *post = [self.postsArray objectAtIndex:indexPath.row];
+    if (post.hasRepost) {
+        identifier = repostIdentifier;
+    } else {
+        identifier = postIdentifier;
+    }
+    RJWallPostCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[RJWallPostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    for (RJUser *user in self.usersArray) {
+        if (user.userID == post.userID) {
+            self.postOwner = user;
+            break;
+        }
+    }
+    cell.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.postOwner.firstName, self.postOwner.lastName];
+    NSDate *postDate = [NSDate dateWithTimeIntervalSince1970:[post.postDate integerValue]];
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"dd MMM yyyy"];
+    NSDateFormatter *timeFormatter = [NSDateFormatter new];
+    [timeFormatter setDateFormat:@"HH:mm"];
+    cell.dateLabel.text = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:postDate], [timeFormatter stringFromDate:postDate]];
+    if (post.postText) {
+        
+        cell.postTextLabel.text = post.postText;
+    }
+    NSURL *imageURL = [NSURL URLWithString:self.postOwner.imageUrl];
+    NSURLRequest *request = [NSURLRequest requestWithURL:imageURL];
+    cell.postImageView.image = nil;
+    cell.postImageView.layer.cornerRadius = CGRectGetHeight(cell.postImageView.bounds) / 2;
+    cell.postImageView.clipsToBounds = YES;
+    __weak RJWallPostCell *weakCell = cell;
+    [cell.postImageView setImageWithURLRequest:request
+                          placeholderImage:nil
+                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                       weakCell.postImageView.image = image;
+                                       [weakCell layoutSubviews];
+                                   }
+                                   failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                       NSLog(@"Error = %@, code = %ld", [error localizedDescription], response.statusCode);
+                                   }];
+    cell.attachmentView.image = nil;
+    if (post.attachments) {
+        RJPhoto *photo = [[RJPhoto alloc] initWithDictionary:[post.attachments firstObject]];
+        NSURL *photoURL = [NSURL URLWithString:photo.imageUrl];
+        NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoURL];
+        [cell.attachmentView setImageWithURLRequest:photoRequest
+                         placeholderImage:nil
+                                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                      weakCell.attachmentView.image = image;
+                                      [weakCell layoutSubviews];
+                                  }
+                                  failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                      NSLog(@"Error = %@, code = %ld", [error localizedDescription], response.statusCode);
+                                  }];
+    }
+    cell.commentsLabel.text = [NSString stringWithFormat:@"Comments: %ld", post.comments];
+    cell.commentsLabel.layer.cornerRadius = 5.f;
+    cell.commentsLabel.clipsToBounds = YES;
+    cell.repostsLabel.text = [NSString stringWithFormat:@"Reposts: %ld", post.reposts];
+    cell.repostsLabel.layer.cornerRadius = 5.f;
+    cell.repostsLabel.clipsToBounds = YES;
+    cell.likesLabel.text = [NSString stringWithFormat:@"Likes: %ld", post.likes];
+    cell.likesLabel.layer.cornerRadius = 5.f;
+    cell.likesLabel.clipsToBounds = YES;
+    
+//from here code for repost cell starts
+    self.repostOwner = nil;
+    if (post.hasRepost) {
+        for (RJUser *user in self.usersArray) {
+            if (user.userID == post.repostSourceID) {
+                self.repostOwner = user;
+                break;
+            }
+        }
+        if (!self.repostOwner) {
+            for (RJGroup *group in self.groupsArray) {
+                if (group.groupID == -post.repostSourceID) {
+                    self.repostOwner = group;
+                    break;
+                }
+            }
+        }
+        NSString *imageUrlString;
+        if ([self.repostOwner isKindOfClass:[RJUser class]]) {
+            RJUser *user = (RJUser *)self.repostOwner;
+            cell.repostNameLabel.text = [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
+            imageUrlString = user.imageUrl;
+        } else if ([self.repostOwner isKindOfClass:[RJGroup class]]) {
+            RJGroup *group = (RJGroup *)self.repostOwner;
+            cell.repostNameLabel.text = group.name;
+            imageUrlString = group.imageUrl;
+        }
+        NSDate *repostDate = [NSDate dateWithTimeIntervalSince1970:[post.repostDate integerValue]];
+        cell.repostDateLabel.text = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:repostDate], [timeFormatter stringFromDate:repostDate]];
+        if (post.repostText) {
+            cell.repostTextLabel.text = post.repostText;
+        }
+        NSURL *repostImageURL = [NSURL URLWithString:imageUrlString];
+        NSURLRequest *repostRequest = [NSURLRequest requestWithURL:repostImageURL];
+        cell.repostImageView.image = nil;
+        cell.repostImageView.layer.cornerRadius = CGRectGetHeight(cell.repostImageView.bounds) / 2;
+        cell.repostImageView.clipsToBounds = YES;
+        [cell.repostImageView setImageWithURLRequest:repostRequest
+                                  placeholderImage:nil
+                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                               weakCell.repostImageView.image = image;
+                                               [weakCell layoutSubviews];
+                                           }
+                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                               NSLog(@"Error = %@, code = %ld", [error localizedDescription], response.statusCode);
+                                           }];
+    }
+    cell.repostAttachmentView.image = nil;
+    if (post.repostAttachments) {
+        RJPhoto *photo = [[RJPhoto alloc] initWithDictionary:[post.repostAttachments firstObject]];
+        NSURL *photoURL = [NSURL URLWithString:[(NSArray *)photo.imageUrl firstObject]];
+        NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoURL];
+        [cell.repostAttachmentView setImageWithURLRequest:photoRequest
+                                   placeholderImage:nil
+                                            success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                weakCell.repostAttachmentView.image = image;
+                                                [weakCell layoutSubviews];
+                                            }
+                                            failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                NSLog(@"Error = %@, code = %ld", [error localizedDescription], response.statusCode);
+                                            }];
+    }
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 420;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 
 #pragma mark - Methods
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E00F4A161AA3928700AD3763 /* RJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = E00F4A151AA3928700AD3763 /* RJPhoto.m */; };
 		E01CE04E1A9FC3B900A9F5E1 /* online@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E01CE04D1A9FC3B900A9F5E1 /* online@2X.png */; };
 		E01CE0511A9FC4EC00A9F5E1 /* RJFriendListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E01CE0501A9FC4EC00A9F5E1 /* RJFriendListCell.m */; };
 		E01CE0551A9FCEF900A9F5E1 /* online_mobile@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E01CE0541A9FCEF900A9F5E1 /* online_mobile@2X.png */; };
@@ -39,10 +40,12 @@
 		E0753BD41A9DE18A00EE79B5 /* RJUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E0753BD31A9DE18A00EE79B5 /* RJUser.m */; };
 		E0753BDB1A9E058600EE79B5 /* UIScrollView+InfiniteScroll.m in Sources */ = {isa = PBXBuildFile; fileRef = E0753BDA1A9E058600EE79B5 /* UIScrollView+InfiniteScroll.m */; };
 		E08548C91A9E29C20040DDEB /* RJFriendProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = E08548C81A9E29C20040DDEB /* RJFriendProfileController.m */; };
+		E0D14C1A1AA318FD001F8000 /* repost@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E0D14C191AA318FD001F8000 /* repost@2X.png */; };
 		E0EC8DB41AA093B800C6FD26 /* RJFollowersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EC8DB31AA093B800C6FD26 /* RJFollowersViewController.m */; };
 		E0EC8DB71AA0A01600C6FD26 /* RJGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EC8DB61AA0A01600C6FD26 /* RJGroupsViewController.m */; };
 		E0EC8DBA1AA0AEAA00C6FD26 /* RJGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EC8DB91AA0AEAA00C6FD26 /* RJGroup.m */; };
 		E0EC8DC11AA0D2C500C6FD26 /* RJWallPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EC8DC01AA0D2C500C6FD26 /* RJWallPost.m */; };
+		E0EC8DC71AA0D5BA00C6FD26 /* RJWallPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EC8DC61AA0D5BA00C6FD26 /* RJWallPostCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E00F4A141AA3928700AD3763 /* RJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJPhoto.h; sourceTree = "<group>"; };
+		E00F4A151AA3928700AD3763 /* RJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJPhoto.m; sourceTree = "<group>"; };
 		E01CE04D1A9FC3B900A9F5E1 /* online@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "online@2X.png"; sourceTree = "<group>"; };
 		E01CE04F1A9FC4EC00A9F5E1 /* RJFriendListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RJFriendListCell.h; path = ../RJFriendListCell.h; sourceTree = "<group>"; };
 		E01CE0501A9FC4EC00A9F5E1 /* RJFriendListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RJFriendListCell.m; path = ../RJFriendListCell.m; sourceTree = "<group>"; };
@@ -118,6 +123,7 @@
 		E0753BDA1A9E058600EE79B5 /* UIScrollView+InfiniteScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+InfiniteScroll.m"; path = "../../../../Downloads/UIScrollView-InfiniteScroll-master/Classes/UIScrollView+InfiniteScroll.m"; sourceTree = "<group>"; };
 		E08548C71A9E29C20040DDEB /* RJFriendProfileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJFriendProfileController.h; sourceTree = "<group>"; };
 		E08548C81A9E29C20040DDEB /* RJFriendProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJFriendProfileController.m; sourceTree = "<group>"; };
+		E0D14C191AA318FD001F8000 /* repost@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "repost@2X.png"; sourceTree = "<group>"; };
 		E0EC8DB21AA093B800C6FD26 /* RJFollowersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJFollowersViewController.h; sourceTree = "<group>"; };
 		E0EC8DB31AA093B800C6FD26 /* RJFollowersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJFollowersViewController.m; sourceTree = "<group>"; };
 		E0EC8DB51AA0A01600C6FD26 /* RJGroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJGroupsViewController.h; sourceTree = "<group>"; };
@@ -126,6 +132,8 @@
 		E0EC8DB91AA0AEAA00C6FD26 /* RJGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJGroup.m; sourceTree = "<group>"; };
 		E0EC8DBF1AA0D2C500C6FD26 /* RJWallPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJWallPost.h; sourceTree = "<group>"; };
 		E0EC8DC01AA0D2C500C6FD26 /* RJWallPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJWallPost.m; sourceTree = "<group>"; };
+		E0EC8DC51AA0D5BA00C6FD26 /* RJWallPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RJWallPostCell.h; sourceTree = "<group>"; };
+		E0EC8DC61AA0D5BA00C6FD26 /* RJWallPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RJWallPostCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +157,7 @@
 		E01CE04C1A9FC3B900A9F5E1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E0D14C191AA318FD001F8000 /* repost@2X.png */,
 				E01CE0561A9FD0A900A9F5E1 /* online_mobile_small@2X.png */,
 				E01CE0541A9FCEF900A9F5E1 /* online_mobile@2X.png */,
 				E01CE04D1A9FC3B900A9F5E1 /* online@2X.png */,
@@ -299,6 +308,8 @@
 				E0EC8DB91AA0AEAA00C6FD26 /* RJGroup.m */,
 				E0EC8DBF1AA0D2C500C6FD26 /* RJWallPost.h */,
 				E0EC8DC01AA0D2C500C6FD26 /* RJWallPost.m */,
+				E00F4A141AA3928700AD3763 /* RJPhoto.h */,
+				E00F4A151AA3928700AD3763 /* RJPhoto.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -308,6 +319,8 @@
 			children = (
 				E01CE04F1A9FC4EC00A9F5E1 /* RJFriendListCell.h */,
 				E01CE0501A9FC4EC00A9F5E1 /* RJFriendListCell.m */,
+				E0EC8DC51AA0D5BA00C6FD26 /* RJWallPostCell.h */,
+				E0EC8DC61AA0D5BA00C6FD26 /* RJWallPostCell.m */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -422,6 +435,7 @@
 				E0753B7F1A9DD35800EE79B5 /* Images.xcassets in Resources */,
 				E01CE04E1A9FC3B900A9F5E1 /* online@2X.png in Resources */,
 				E01CE0571A9FD0A900A9F5E1 /* online_mobile_small@2X.png in Resources */,
+				E0D14C1A1AA318FD001F8000 /* repost@2X.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +464,7 @@
 				E08548C91A9E29C20040DDEB /* RJFriendProfileController.m in Sources */,
 				E0EC8DB71AA0A01600C6FD26 /* RJGroupsViewController.m in Sources */,
 				E0753BC21A9DD7F900EE79B5 /* AFHTTPRequestOperationManager.m in Sources */,
+				E0EC8DC71AA0D5BA00C6FD26 /* RJWallPostCell.m in Sources */,
 				E0753BC61A9DD7F900EE79B5 /* AFURLConnectionOperation.m in Sources */,
 				E0753BD41A9DE18A00EE79B5 /* RJUser.m in Sources */,
 				E01CE0511A9FC4EC00A9F5E1 /* RJFriendListCell.m in Sources */,
@@ -458,6 +473,7 @@
 				E0753BCB1A9DD7F900EE79B5 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				E0753B991A9DD3CA00EE79B5 /* RJServerManager.m in Sources */,
 				E0753BC71A9DD7F900EE79B5 /* AFURLRequestSerialization.m in Sources */,
+				E00F4A161AA3928700AD3763 /* RJPhoto.m in Sources */,
 				E0753BDB1A9E058600EE79B5 /* UIScrollView+InfiniteScroll.m in Sources */,
 				E0753BC31A9DD7F900EE79B5 /* AFHTTPSessionManager.m in Sources */,
 				E0753BC41A9DD7F900EE79B5 /* AFNetworkReachabilityManager.m in Sources */,

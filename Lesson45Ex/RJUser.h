@@ -13,7 +13,7 @@
 @property (strong, nonatomic) NSString *lastName;
 @property (strong, nonatomic) NSString *imageUrl;
 @property (strong, nonatomic) NSString *originalImageUrl;
-@property (assign, nonatomic) NSInteger friendID;
+@property (assign, nonatomic) NSInteger userID;
 @property (strong, nonatomic) NSString *birthDate;
 @property (strong, nonatomic) NSString *city;
 @property (strong, nonatomic) NSString *country;

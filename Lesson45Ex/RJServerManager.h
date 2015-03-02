@@ -34,4 +34,9 @@
               onSuccess:(void(^)(NSArray *friends))success
               onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
+- (void) getWallForId:(NSInteger)ownerID
+            withCount:(NSInteger)count
+            andOffset:(NSInteger)offset
+            onSuccess:(void(^)(NSArray *posts, NSArray *users, NSArray *groups))success
+            onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 @end

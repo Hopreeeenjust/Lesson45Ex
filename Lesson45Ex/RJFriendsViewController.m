@@ -52,7 +52,7 @@ NSInteger friendsBatch = 20;
 
 - (void)getFriendsFromServer {
     [[RJServerManager sharedManager] getFriendsForId:self.userID withCount:friendsBatch andOffset:[self.friendsArray count] onSuccess:^(NSArray *friends) {
-        [[self mutableArrayValueForKey:@"friendsArray"] addObjectsFromArray:friends];;
+        [[self mutableArrayValueForKey:@"friendsArray"] addObjectsFromArray:friends];
         NSMutableArray *newPaths = [NSMutableArray array];
         for (int i = (int)[self.friendsArray count] - (int)[friends count]; i < [self.friendsArray count]; i++) {
             [newPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -112,7 +112,7 @@ NSInteger friendsBatch = 20;
     NSDictionary *friendInfo = [self.friendsArray objectAtIndex:indexPath.row];
     RJUser *friend = [[RJUser alloc] initWithDictionary:friendInfo];
     RJFriendProfileController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"RJFriendProfileController"];
-    vc.userID = friend.friendID;
+    vc.userID = friend.userID;
     vc.title = friend.firstName;
     [self.navigationController pushViewController:vc animated:YES];
 }

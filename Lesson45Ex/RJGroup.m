@@ -18,8 +18,13 @@
         self.originalImageUrl = [dictionary valueForKey:@"photo_max"];
         self.city = [dictionary valueForKeyPath:@"city.title"];
         self.country = [dictionary valueForKeyPath:@"country.title"];
+        self.groupID = [[dictionary valueForKey:@"id"] integerValue];
     }
     return self;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"GROUP name: %@, id: %ld", self.name, self.groupID];
 }
 
 @end

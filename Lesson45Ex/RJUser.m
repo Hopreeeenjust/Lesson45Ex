@@ -17,7 +17,7 @@
         self.lastName = [dictionary valueForKey:@"last_name"];
         self.imageUrl = [dictionary valueForKey:@"photo_100"];
         self.originalImageUrl = [dictionary valueForKey:@"photo_max"];
-        self.friendID = [[dictionary valueForKey:@"id"] integerValue];
+        self.userID = [[dictionary valueForKey:@"id"] integerValue];
         self.birthDate = [dictionary valueForKey:@"bdate"];
         self.city = [dictionary valueForKeyPath:@"city.title"];
         self.country = [dictionary valueForKeyPath:@"country.title"];
@@ -26,5 +26,9 @@
         self.onlineMobile = [[dictionary valueForKey:@"online_mobile"] integerValue];
     }
     return self;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"USER name: %@ %@, id: %ld", self.firstName, self.lastName, self.userID];
 }
 @end

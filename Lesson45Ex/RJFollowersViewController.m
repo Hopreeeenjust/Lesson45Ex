@@ -114,7 +114,7 @@ NSInteger followersBatch = 20;
     NSDictionary *followerInfo = [self.followersArray objectAtIndex:indexPath.row];
     RJUser *follower = [[RJUser alloc] initWithDictionary:followerInfo];
     RJFriendProfileController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"RJFriendProfileController"];
-    vc.userID = follower.friendID;
+    vc.userID = follower.userID;
     vc.title = follower.firstName;
     [self.navigationController pushViewController:vc animated:YES];
 }
